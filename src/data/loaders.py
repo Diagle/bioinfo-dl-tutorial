@@ -13,11 +13,8 @@ class Bunch:
     target_names: list = None
     DESCR: str = ""
 
-
 def load_tiny_dna():
     """
-    加载一个示例 DNA 数据集（教学用），结构类似 sklearn.load_iris()
-
     Returns
     -------
     Bunch
@@ -44,3 +41,36 @@ def load_tiny_dna():
         target_names=target_names,
         DESCR="A tiny DNA sequence dataset for demonstration."
     )
+
+def load_cellines_drug_response():
+    """
+    Returns
+    -------
+    Bunch
+        data:基因表达信息(pandas)
+        target:细胞系耐药结果(sensitive/resisted)
+        feature_names:(gene)
+        target_names:(敏感1/耐药0)
+        DESCR:"A cellliens cancer drug response dataset."
+    """
+    data_path = os.path.join(DATA_DIR, "drug_resonse", "Erlotinib_data.txt")
+    label_path = os.path.join(DATA_DIR, "drug_resonse", "Erlotinib_label.txt")
+    if not os.path.exists(data_path):
+        raise FileNotFoundError(f"Cannot find dataset file: {data_path}")
+    
+    data = pd.read_csv(data_path,sep='\t',index_col=0).T
+    target = pd.read_csv('./Cetuximab_label.txt',sep='\t',index_col=0)['Class']
+    target_names = sorted(list(set(target)))
+    return Bunch(
+        data=data,
+        target=target,
+        feature_names=["gene"],
+        target_names=target_names,
+        DESCR="A cellliens cancer drug response dataset."
+    )
+    
+if __name__ == "__main__":
+    drug_response =  load_cellines_drug_response()
+
+else:
+    print("data load successfully!")
