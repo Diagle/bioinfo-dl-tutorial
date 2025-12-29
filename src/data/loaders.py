@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import scipy.io as sio
+import numpy as np
 
 from dataclasses import dataclass
 
@@ -36,7 +37,7 @@ def load_amazon_fc6():
     mat_data = sio.loadmat(mat_path)
     data = mat_data['fts']
     target = mat_data['labels'].flatten()
-    target_names = sorted(list(set(target)))
+    target_names = sorted(int(i) for i in list(set(target)))
     return Bunch(
         data=data,
         target=target,
@@ -65,13 +66,42 @@ def load_dslr_fc6():
     mat_data = sio.loadmat(mat_path)
     data = mat_data['fts']
     target = mat_data['labels'].flatten()
-    target_names = sorted(list(set(target)))
+    target_names = sorted(int(i) for i in list(set(target)))
     return Bunch(
         data=data,
         target=target,
         feature_names=["DeCAF"],
         target_names=target_names,
         DESCR="Office-31 DSLR ImageNet 第6层 DeCAF 深度学习特征集。"
+    )
+
+def load_number():
+    """
+    Returns
+    -------
+    Bunch
+        data:MNIST vs USPS 数据集\n
+        target:数字类别\n
+        feature_names:图像像素点\n
+        target_names:0-9\n
+        DESCR:"MNIST(2000) & USPS(1800) 数据集"
+    """
+    mat_path = os.path.join(DATA_DIR, "number", "MNIST_vs_USPS.mat")
+
+    if not os.path.exists(mat_path):
+        raise FileNotFoundError(f"Cannot find dataset file: {mat_path}")
+
+    mat_data = sio.loadmat(mat_path)
+    
+    data = np.concatenate((mat_data['X_tar'],mat_data['X_src']),axis=1).T
+    target = np.concatenate((mat_data['Y_tar'],mat_data['Y_src']),axis=0).flatten()
+    target_names = sorted(int(i) for i in  list(set(target)))
+    return Bunch(
+        data=data,
+        target=target,
+        feature_names=["pixel"],
+        target_names=target_names,
+        DESCR="MNIST(2000) & USPS(1800) 数据集"
     )
 
 
@@ -93,7 +123,7 @@ def load_bulk_drug_response():
     
     data = pd.read_csv(data_path,sep='\t',index_col=0).T
     target = pd.read_csv(label_path,sep='\t',index_col=0).values.flatten()
-    target_names = sorted(list(set(target)))
+    target_names = sorted(int(i) for i in list(set(target)))
     
     return Bunch(
         data=data,
@@ -121,7 +151,7 @@ def load_sc_drug_response():
     info = pd.read_csv(info_path,sep=',',index_col=0)
     data = info.iloc[:,1:]
     target = info.iloc[:,0].values.flatten()
-    target_names = sorted(list(set(target)))
+    target_names = sorted(int(i) for i in list(set(target)))
     
     return Bunch(
         data=data,
@@ -152,7 +182,7 @@ def load_cancer():
     
     data = pd.read_csv(data_path,sep=',',index_col=1).iloc[:,1:].T
     target = pd.read_csv(label_path,sep=',',index_col=1).loc[:,'DFS (in months)'].values.flatten()
-    target_names = sorted(list(set(target)))
+    target_names = sorted(int(i) for i in list(set(target)))
 
     return Bunch(
         data=data,
@@ -168,5 +198,5 @@ if __name__ == "__main__":
     label = df.target
 
 else:
-    print("data load successfully!")
+    print("loaders.py load successfully!")
 
