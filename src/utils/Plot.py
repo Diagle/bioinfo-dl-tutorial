@@ -5,7 +5,7 @@ import seaborn as sns
 from sklearn.decomposition import PCA
 
 
-def Domain_plot(X, y ,sample_domain):
+def DomainPlot(X, y ,sample_domain):
     src_idx = np.where(sample_domain == 1)
     tar_idx = np.where(sample_domain == -1)
     Xs = X[src_idx]
@@ -29,7 +29,7 @@ def Domain_plot(X, y ,sample_domain):
     plt.title("Target samples")
     plt.tight_layout()
 
-def PCA_plot(X, y ,sample_domain):
+def PCAPlot(X, y ,sample_domain):
 
     src_idx = np.where(sample_domain == 1)
     tar_idx = np.where(sample_domain == -1)
@@ -62,10 +62,19 @@ def PCA_plot(X, y ,sample_domain):
     plt.title("Target  samples")
     plt.tight_layout()
 
-def curve_plot(x, y1, y2, label_list):
+def CurvePlot(x, y1, y2, label_list):
     plt.figure(figsize=(8,5))
     plt.plot(x, y1, label=label_list[0])
-    plt.plot(x, y2 , 'm--', label=label_list[1])
+    if y2 != None:
+        plt.plot(x, y2 , 'm--', label=label_list[1])
+    plt.grid()
+    plt.legend()
+    plt.show()
+
+def GradientDescentPlot(x, x_, f):
+    plt.figure(figsize=(8,5))
+    plt.plot(x, f(x), label='f(x)')
+    plt.plot(x_, f(x_), 'm--', marker='o', markersize=4, label = 'gradient descent')
     plt.grid()
     plt.legend()
     plt.show()
@@ -78,4 +87,4 @@ if __name__ ==  '__main__':
     X = np.concatenate((Xs,Xt),axis=0)
     sample_domain = np.array([1]*100+[-1]*80)
 
-    PCA_plot(X,y,sample_domain)
+    PCAPlot(X,y,sample_domain)
