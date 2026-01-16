@@ -79,6 +79,24 @@ def GradientDescentPlot(x, x_, f):
     plt.legend()
     plt.show()
 
+def LossAndAccPlot(epochs, train_loss, test_loss, train_acc, test_acc):
+    epoch_list = [i+1 for i in range(epochs)]
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+    axes[0].plot(epoch_list, train_acc, 'red', label='train acc')
+    axes[0].plot(epoch_list, test_acc, 'blue', label='test acc')
+    axes[0].set_yticks([i/10 for i in range(11)])
+    axes[0].set_yticklabels([i/10 for i in range(11)])
+    axes[0].legend()
+    axes[0].set_ylabel('Accuracy')
+
+    axes[1].plot(epoch_list, train_loss, 'orange', label='train loss')
+    axes[1].plot(epoch_list, test_loss, 'skyblue', label='test loss')
+    axes[1].legend()
+    axes[1].set_ylabel('Loss')
+    plt.tight_layout()
+    plt.show()
+    return 
+
 
 if __name__ ==  '__main__':
     Xs = np.concatenate((np.random.normal(2,10,(50,1000)) , np.random.normal(-2,10,(50,1000))),axis=0)
