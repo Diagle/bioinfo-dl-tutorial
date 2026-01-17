@@ -79,6 +79,17 @@ def GradientDescentPlot(x, x_, f):
     plt.legend()
     plt.show()
 
+def GradientPlot_2d(x1_range, x2_range, f, results):
+    
+    plt.figure(figsize=(8,6))
+    x1, x2 = np.meshgrid(np.arange(x1_range[0], x1_range[1], 0.1), 
+                            np.arange(x2_range[0], x2_range[1], 0.1), indexing='ij' )
+    plt.contour(x1, x2, f(x1, x2), colors='green')
+    plt.plot(*zip(*results), '-o', color='orange') # 内层*号将列表打开，作为输入参数，zip函数按列重组，外层*号打开为两列输入
+    plt.xlabel('x1')
+    plt.ylabel('x2')
+    plt.show()
+
 def LossAndAccPlot(epochs, train_loss, test_loss, train_acc, test_acc):
     epoch_list = [i+1 for i in range(epochs)]
     fig, axes = plt.subplots(1, 2, figsize=(12, 5))
